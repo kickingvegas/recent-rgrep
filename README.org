@@ -1,0 +1,76 @@
+* Recent rgrep
+
+NOTE: THIS PROJECT IS WIP.
+
+Bash script to run a recursive ~grep~ search and present the results in the order of most recently modified files descending. Included is support to invoke ~recent-rgrep~ from Emacs via the file ~recent-rgrep.el~. 
+
+This scripts requires the following GNU utilities be installed:
+
+- ~grep~
+- ~ls~
+- ~awk~
+- ~mktmp~
+
+* Installation
+
+Installation is done via GNU Make.
+
+** Install ~recent-rgrep~
+
+Use the target ~install~ to install the Bash script ~recent-rgrep~. 
+
+#+begin_src shell
+ $ make install 
+#+end_src
+
+By default the install directory specified by the Make variable ~INSTALL_DIR~ is ~$(HOME)/bin~. Edit or override ~INSTALL_DIR~ to preference.
+
+** Install ~recent-rgrep.el~
+
+Use the target ~install-el~ to install the Elisp script ~recent-rgrep.el~. 
+
+#+begin_src shell
+ $ make install-el 
+#+end_src
+
+By default the install directory specified by the Make variable ~ELISP_DIR~ is ~$(HOME)/emacs~. Edit or override ~ELISP_DIR~ to preference.
+
+* Running recent-rgrep from the Command Line
+
+The following command line documentation is output via ~recent-rgrep -h~.
+
+#+begin_src text
+  Usage: recent-rgrep [OPTION]… [REGEXP]
+
+  Recursively search for GNU grep REGEXP pattern and present results in order of
+  most recently modified files descending.
+
+     -c         Case sensitive search (default case insensitive)
+     -f GLOB    Search only files whose name matches glob pattern GLOB.
+                If omitted then all non-binary files will be searched.
+     -h         Help
+
+  This script requires that the GNU utilities grep, mktemp, xargs, ls, and awk are
+  installed.
+#+end_src
+
+The following example will run ~recent-rgrep~ to search for the phrase “happy to see you” on only files with the extension ~.org~.
+
+#+begin_src shell
+  $ recent-rgrep -f '*.org' 'happy to see you'
+#+end_src
+
+
+* Running recent-rgrep from Emacs
+
+Provided that ~recent-rgrep.el~ is loaded, invoke it via ~M-x recent-rgrep~. 
+
+Users can elect to bind this command to their preference.
+
+Here is a configuration that I personally use. 
+
+#+begin_src elisp :lexical no
+(keymap-global-set "M-F" #'recent-rgrep)
+#+end_src
+
+
