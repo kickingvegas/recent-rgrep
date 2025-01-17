@@ -1,15 +1,26 @@
 * Recent rgrep
 
-NOTE: THIS PROJECT IS WIP.
+Bash script to run a recursive ~grep~ search and present the results in the order of most recently modified files descending. Included is support to invoke ~recent-rgrep~ from Emacs via the file ~recent-rgrep.el~.
 
-Bash script to run a recursive ~grep~ search and present the results in the order of most recently modified files descending. Included is support to invoke ~recent-rgrep~ from Emacs via the file ~recent-rgrep.el~. 
+** Features
+- Reports matches in order most recently modified files descending (that is, the most recent files are reported first).
+- Search only in non-binary files.
+- Avoids searching in common SCM directories (~.git~, ~.hg~, ~.svn~, ~.cvs~).
+- Uses the existing ~grep~ that you have installed on your system.
+- Default search is case-insensitive.
+- Emacs support.
 
-This scripts requires the following GNU utilities be installed:
+* Requirements
+
+The following POSIX.1 compliant utilities should be installed for this script to use. 
 
 - ~grep~
 - ~ls~
 - ~awk~
 - ~mktmp~
+- ~bash~
+
+This script has been verified to work on Ubuntu 22.04.5 LTS and macOS 15.2.
 
 * Installation
 
@@ -42,16 +53,18 @@ The following command line documentation is output via ~recent-rgrep -h~.
 #+begin_src text
   Usage: recent-rgrep [OPTION]… [REGEXP]
 
-  Recursively search for GNU grep REGEXP pattern and present results in order of
+  Recursively search for grep REGEXP pattern and present results in order of
   most recently modified files descending.
 
      -c         Case sensitive search (default case insensitive)
      -f GLOB    Search only files whose name matches glob pattern GLOB.
                 If omitted then all non-binary files will be searched.
+                GLOB should be quoted to avoid shell expansion.
      -h         Help
 
-  This script requires that the GNU utilities grep, mktemp, xargs, ls, and awk are
-  installed.
+  This script requires that your local install of grep, awk, ls, mktemp, and xargs
+  be compliant with IEEE Std 1003.1-2008 (“POSIX.1”). Please inspect your PATH
+  variable to confirm which tool variant you are using.
 #+end_src
 
 The following example will run ~recent-rgrep~ to search for the phrase “happy to see you” on only files with the extension ~.org~.
@@ -60,17 +73,32 @@ The following example will run ~recent-rgrep~ to search for the phrase “happy 
   $ recent-rgrep -f '*.org' 'happy to see you'
 #+end_src
 
-
 * Running recent-rgrep from Emacs
 
 Provided that ~recent-rgrep.el~ is loaded, invoke it via ~M-x recent-rgrep~. 
 
 Users can elect to bind this command to their preference.
 
-Here is a configuration that I personally use. 
+Here is a configuration that I personally use to emulate ⌘-F in macOS apps.
 
 #+begin_src elisp :lexical no
-(keymap-global-set "M-F" #'recent-rgrep)
+  (keymap-global-set "M-F" #'recent-rgrep)
 #+end_src
 
+
+* Considerations
+
+** Performance
+
+To achieve the requirement of reporting the matches in the desired order of recently modified files first, two passes involving ~grep~ are made. This can be slow for cases where any combination of the following conditions are met:
+
+- The directory tree is filled with many files.
+- The directory tree is filled with files that are large in size.
+- The directory tree is deeply nested.
+
+YMMV.  
+
+** What about ripgrep?
+
+NGL, you're likely better off using [[https://github.com/BurntSushi/ripgrep][ripgrep]] if you have it installed. But if not, then this script can achieve the desired result described above.
 
