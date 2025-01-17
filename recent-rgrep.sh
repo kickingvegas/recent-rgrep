@@ -72,6 +72,10 @@ grep --recursive                                \
      -I                                         \
      --files-with-matches                       \
      $c                                         \
+     --exclude-dir=".git"                       \
+     --exclude-dir=".hg"                        \
+     --exclude-dir=".svn"                       \
+     --exclude-dir=".cvs"                       \
      $f                                         \
      --regexp="$1" |                            \
     xargs ls -lt > $SORTED_FILES
