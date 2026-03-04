@@ -1,5 +1,5 @@
 ##
-# Copyright 2025 Charles Y. Choi
+# Copyright 2025-2026 Charles Y. Choi
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,15 +17,15 @@
 ##
 # Install Instructions
 
-# 1. Edit INSTALL_DIR and optionally ELISP_DIR to preferred locations.
-# 2. Run `make install` to install `recent-rgrep` in INSTALL_DIR
-# 3. Run `make install-el` to install `recent-rgrep.el` in ELISP_DIR
+# 1. If desired, override INSTALL_DIR and optionally ELISP_DIR to preferred
+#    locations.
+# 2. Run `make install` to install `recent-rgrep` in INSTALL_DIR and
+#    `recent-rgrep.el` in ELISP_DIR
 
-# Edit INSTALL_DIR to directory where script recent-rgrep will be stored.
-INSTALL_DIR=$(HOME)/bin
+INSTALL_DIR:=$(HOME)/bin
 
 # Edit ELISP_DIR to directory to store recent-rgrep.el
-ELISP_DIR=$(HOME)/emacs
+ELISP_DIR:=$(HOME)/emacs
 
 TIMESTAMP := $(shell /bin/date "+%Y%m%d_%H%M%S")
 
@@ -36,14 +36,20 @@ $(INSTALL_DIR):
 	mkdir $(INSTALL_DIR)
 
 .PHONY: install
-install: $(INSTALL_DIR)/$(EXEC_NAME)
+install: install-sh install-el
+
+.PHONY: install-sh
+install-sh: $(INSTALL_DIR)/$(EXEC_NAME)
 
 $(INSTALL_DIR)/$(EXEC_NAME): $(INSTALL_DIR) $(EXEC_SRC)
 	cp -f $(EXEC_SRC) $(INSTALL_DIR)/$(EXEC_NAME)
 	chmod uog+x $(INSTALL_DIR)/$(EXEC_NAME)
 
 .PHONY: uninstall
-uninstall:
+uninstall: uninstall-sh uninstall-el
+
+.PHONY: uninstall-sh
+uninstall-sh:
 	rm $(INSTALL_DIR)/$(EXEC_NAME)
 
 .PHONY: install-el

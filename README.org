@@ -26,25 +26,21 @@ This script has been verified to work on Ubuntu 22.04.5 LTS and macOS 15.2.
 
 Installation is done via GNU Make.
 
-** Install ~recent-rgrep~
-
-Use the target ~install~ to install the Bash script ~recent-rgrep~. 
+Use the target ~install~ to install the Bash script ~recent-rgrep~ and Elisp script ~recent-rgrep.el~. 
 
 #+begin_src shell
  $ make install 
 #+end_src
 
-By default the install directory specified by the Make variable ~INSTALL_DIR~ is ~$(HOME)/bin~. Edit or override ~INSTALL_DIR~ to preference.
+The installation paths are described by the table below:
 
-** Install ~recent-rgrep.el~
+| Make Variable | Default Value | Description                                   |
+|---------------+---------------+-----------------------------------------------|
+| ~INSTALL_DIR~   | ~$(HOME)/bin~   | Installation destination for ~recent-rgrep~.    |
+| ~ELISP_DIR~     | ~$(HOME)/emacs~ | Installation destination for ~recent-rgrep.el~. |
 
-Use the target ~install-el~ to install the Elisp script ~recent-rgrep.el~. 
+Edit or override ~INSTALL_DIR~ and ~ELISP_DIR~ to preference.
 
-#+begin_src shell
- $ make install-el 
-#+end_src
-
-By default the install directory specified by the Make variable ~ELISP_DIR~ is ~$(HOME)/emacs~. Edit or override ~ELISP_DIR~ to preference.
 
 * Running recent-rgrep from the Command Line
 
